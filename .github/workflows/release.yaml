@@ -25,12 +25,13 @@ jobs:
       run: |       
         echo "from EnvironmentVariable = ${env:GITHUB_REF}"
         echo "from context = ${{ github.ref }}"
-        $groups = $( Select-String -InputObject "${{ github.ref }}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups
-        echo "RELEASE_VERSION=$($groups[0])" >> $GITHUB_ENV
-        echo "Major=$( $groups[1] )"  >> $GITHUB_ENV 
-        echo "Minor=$( $groups[2] )"  >> $GITHUB_ENV
-        echo "Revision=$( $groups[3] )"  >> $GITHUB_ENV
-        echo "SemVerSuffix=$( $groups[4] )"  >> $GITHUB_ENV
+        $groups = $( Select-String -InputObject "${{ github.ref }}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups       
+        
+        echo "RELEASE_VERSION=$($groups[0])" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "Major=$( $groups[1] )"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "Minor=$( $groups[2] )"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "Revision=$( $groups[3] )" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append 
+        echo "SemVerSuffix=$( $groups[4] )" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append 
 
     - name: Print Version Info
       shell: powershell
