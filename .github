@@ -1,0 +1,38 @@
+
+name: Release Build
+
+# Controls when the action will run. Triggers the workflow on push of a tag that matches the wildcard
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    name: Build
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '2.1.403'
+    - uses: nuget/setup-nuget@v1
+
+    - name: Get Tag
+      run: |
+        echo "$( $groups = $( Select-String -InputObject "$githubRef" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups )"
+        echo "RELEASE_VERSION=$($groups[0])" 
+        echo "Major=$( $groups[1] )"   
+        echo "Minor=$( $groups[2] )"   
+        echo "Revision=$( $groups[3] )"  
+        echo "SemVerSuffix=$( $groups[4] )"   
+
+    - name: Print Version Info
+      shell: powershell
+      run:  |
+          echo "Major ==> ${env:Major}"
+          echo "Minor ==> ${env:Minor}"
