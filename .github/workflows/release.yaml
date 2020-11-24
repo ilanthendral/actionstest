@@ -24,7 +24,7 @@ jobs:
 
     - name: Get Tag
       run: |
-        echo "$( $groups = $( Select-String -InputObject "$githubRef" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups )"
+        echo "$( $groups = $( Select-String -InputObject "${env.GITHUB_REF}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups )"
         echo "RELEASE_VERSION=$($groups[0])" 
         echo "Major=$( $groups[1] )"   
         echo "Minor=$( $groups[2] )"   
