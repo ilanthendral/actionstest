@@ -23,9 +23,10 @@ jobs:
     - uses: nuget/setup-nuget@v1
 
     - name: Get Tag
+      shell: powershell
       run: |
-        echo "$( $groups = $( Select-String -InputObject "${env.GITHUB_REF}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups )"
-        echo "RELEASE_VERSION=$($groups[0])" 
+        $groups = $( Select-String -InputObject "$GITHUB_REF" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups
+        echo "RELEASE_VERSION=$($groups[0])" >>
         echo "Major=$( $groups[1] )"   
         echo "Minor=$( $groups[2] )"   
         echo "Revision=$( $groups[3] )"  
