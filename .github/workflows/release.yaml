@@ -22,10 +22,10 @@ jobs:
 
     - name: Get Tag
       shell: powershell
-      run: |
-        echo "REF ${env:GITHUB_REF}"
-        echo ":REF $env:GITHUB_REF"
-        $groups = $( Select-String -InputObject "${env:GITHUB_REF}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups
+      run: |       
+        echo "from EnvironmentVariable = ${env:GITHUB_REF}"
+        echo "from context = ${{ github.ref }}"
+        $groups = $( Select-String -InputObject "${{ github.ref }}" -Pattern 'v(\d+)\.(\d+)\.(\d+)(.*)' ).Matches.Groups
         echo "RELEASE_VERSION=$($groups[0])" >> $GITHUB_ENV
         echo "Major=$( $groups[1] )"  >> $GITHUB_ENV 
         echo "Minor=$( $groups[2] )"  >> $GITHUB_ENV
